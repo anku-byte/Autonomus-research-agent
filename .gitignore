@@ -1,0 +1,29 @@
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment Variables & API Keys
+.env
+*.env
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Local Output & Vector DB Storage
+outputs/
+chroma_db/
+*.sqlite3
+*.db
+
+# Streamlit Local Secrets
+.streamlit/secrets.toml
+
+# IDE & OS Files
+.vscode/
+.idea/
+.DS_Store
