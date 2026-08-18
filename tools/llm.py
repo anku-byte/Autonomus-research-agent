@@ -1,19 +1,23 @@
-from openai import OpenAI  # type: ignore[reportMissingImports]
-from app.config import GROQ_API_KEY, GROQ_MODEL
+import os
+from openai import OpenAI
 
-# Groq provides an OpenAI-compatible client endpoint
+# Safely retrieve API Key from Streamlit Secrets or Environment Variables
+GROQ_API_KEY = None
+
+try:
+    import streamlit as st
+    if "GROQ_API_KEY" in st.secrets:
+        GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+except Exception:
+    pass
+
+if not GROQ_API_KEY:
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+if not GROQ_API_KEY:
+    raise ValueError("GROQ_API_KEY missing! Set it in Streamlit Secrets or .env file.")
+
 client = OpenAI(
     base_url="https://api.groq.com/openai/v1",
     api_key=GROQ_API_KEY
 )
-
-def get_completion(prompt: str, model: str = GROQ_MODEL) -> str:
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": "You are a helpful research assistant."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.2,
-    )
-    return response.choices[0].message.content
